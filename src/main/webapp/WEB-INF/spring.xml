@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:util="http://www.springframework.org/schema/util"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:tx="http://www.springframework.org/schema/tx" 
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+   xmlns:aop="http://www.springframework.org/schema/aop"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+        http://www.springframework.org/schema/util 
+         http://www.springframework.org/schema/util/spring-util-4.1.xsd
+        http://www.springframework.org/schema/context 
+         http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+        http://www.springframework.org/schema/tx 
+         http://www.springframework.org/schema/tx/spring-tx-4.1.xsd 
+        http://www.springframework.org/schema/data/jpa
+         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/mvc 
+         http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/aop 
+          http://www.springframework.org/schema/aop/spring-aop-4.1.xsd"
+   default-lazy-init="true">    
+    <context:annotation-config />
+    <context:spring-configured />
+    <!-- rest annotations -->
+    <mvc:annotation-driven />
+    
+    
+    <!--  Rest controllers -->
+    <context:component-scan base-package="org.obrienlabs.nbi.graph.service" />
+    <!-- in cases where the DAO's are in a separate jar - list them -->
+    <bean id="daoFacade" class="org.obrienlabs.nbi.graph.service.ApplicationService"/>
+    <bean id="IGraphDatabaseService" class="org.obrienlabs.nbi.graph.service.GraphDatabaseServiceImpl"/>
+    <util:map id="config">
+        <entry key="ha.allow_init_cluster" value="true"/>
+        <entry key="ha.cluster_name" value="NSP"/>
+        <entry key="ha.cluster_server" value="127.0.0.1:5001"/>
+        <entry key="ha.pull_interval" value="10s"/>
+        <entry key="ha.server" value=":6016"/>
+        <entry key="ha.slave_only" value="false"/>
+        <entry key="ha.tx_push_factor" value="1"/>
+        <entry key="ha.tx_push_strategy" value="fixed_ascending"/>
+        <entry key="ha.server_id" value="1"/>
+        <entry key="ha.initial_hosts" value="127.0.0.1:5001"/>
+        <entry key="dbms.mode" value="HA"/><!-- required to get the http browser -->
+        <entry key="browser.allow_outgoing_connection" value="true" />
+        <entry key="unsupported.dbms.ephemeral" value="false" />   
+        <entry key="dbms.connector.http.address" value="0.0.0.0:7575" />
+        <entry key="dbms.connector.bolt.address" value="0.0.0.0:7688" />
+        <entry key="dbms.connector.http.enabled" value="true" />
+        <entry key="dbms.connector.bolt.enabled" value="true" />
+        <entry key="dbms.connector.http.type" value="HTTP" />
+        <entry key="dbms.connector.bolt.type" value="BOLT" />
+        <entry key="dbms.connector.http.tls_level" value="DISABLED" />
+        <entry key="dbms.connector.bolt.tls_level" value="DISABLED" />
+        <entry key="dbms.security.auth_enabled" value="true"/>
+        <entry key="dbms.logs.debug.level" value="DEBUG"/>
+        <entry key="dbms.logs.http.enabled" value="true" />
+        <entry key="dbms.logs.query.enabled" value="true"/> <!--  causes netty exceptions when ssl enabled -->
+        <entry key="dbms.shell.enabled" value="true"/>          
+    </util:map>
+    
+    <bean id="haMonitor" class="org.obrienlabs.nbi.graph.service.HaMonitor"/>  
+    <bean id="graphDbFactory"  class="org.obrienlabs.nbi.graph.service.ExtendedHighlyAvailableGraphDatabaseFactory">
+        <constructor-arg ref="haMonitor" />
+    </bean>
+    <bean id="graphDbBuilder" 
+        factory-bean="graphDbFactory" 
+        factory-method="newEmbeddedDatabaseBuilder">
+        <constructor-arg value="/ec2-user"/>
+    </bean>
+    <bean id="graphDbBuilderFinal" 
+        factory-bean="graphDbBuilder" 
+        factory-method="setConfig">
+        <constructor-arg ref="config"/>
+    </bean>
+    <!-- HighlyAvailableGraphDatabase wrapped by an EnterpriseBootstrapper NeoServer created in this constructor -->
+    <bean id="graphDatabaseService" 
+        factory-bean="graphDbBuilderFinal" 
+        factory-method="newGraphDatabase" 
+        destroy-method="shutdown" />
+</beans>
+
+
+
