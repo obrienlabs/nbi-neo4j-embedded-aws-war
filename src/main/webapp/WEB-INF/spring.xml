@@ -55,7 +55,7 @@
         <entry key="dbms.connector.bolt.enabled" value="true" />
         <entry key="dbms.connector.http.type" value="HTTP" />
         <entry key="dbms.connector.bolt.type" value="BOLT" />
-        <entry key="dbms.connector.http.tls_level" value="DISABLED" />
+        <entry key="dbms.connector.http.encryption" value="NONE" />
         <entry key="dbms.connector.bolt.tls_level" value="DISABLED" />
         <entry key="dbms.security.auth_enabled" value="true"/>
         <entry key="dbms.logs.debug.level" value="DEBUG"/>
