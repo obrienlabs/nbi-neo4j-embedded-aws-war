@@ -57,7 +57,7 @@
         <entry key="dbms.connector.bolt.type" value="BOLT" />
         <entry key="dbms.connector.http.encryption" value="NONE" />
         <entry key="dbms.connector.bolt.tls_level" value="DISABLED" />
-        <entry key="dbms.security.auth_enabled" value="true"/>
+        <entry key="dbms.security.auth_enabled" value="false"/>
         <entry key="dbms.logs.debug.level" value="DEBUG"/>
         <entry key="dbms.logs.http.enabled" value="true" />
         <entry key="dbms.logs.query.enabled" value="true"/> <!--  causes netty exceptions when ssl enabled -->
