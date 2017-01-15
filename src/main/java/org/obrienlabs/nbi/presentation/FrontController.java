@@ -44,7 +44,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
  * @author Michael O'Brien
  * 
  * URL
- * http://localhost:8080/biometric-nbi/FrontController?action=graph
+ * http://localhost:8080/nbi-neo4j/FrontController?action=graph
  */
 //@WebListener
 public class FrontController extends HttpServlet {

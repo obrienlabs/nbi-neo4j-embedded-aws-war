@@ -16,6 +16,8 @@ import org.neo4j.graphdb.factory.HighlyAvailableGraphDatabaseFactory;
 import org.neo4j.helpers.collection.Pair;
 import org.neo4j.kernel.ha.HighlyAvailableGraphDatabase;
 import org.neo4j.kernel.ha.cluster.HighAvailabilityMemberStateMachine;
+import org.neo4j.server.NeoServer;
+import org.neo4j.server.database.Database;
 import org.neo4j.server.enterprise.EnterpriseBootstrapper;
 
 // http://localhost:8080/nbi-neo4j/FrontController?action=graph
@@ -31,6 +33,7 @@ public class ExtendedHighlyAvailableGraphDatabaseFactory extends HighlyAvailable
                 @Override
                 public GraphDatabaseService newDatabase( final Map<String, String> config ) {
                     EnterpriseBootstrapper neoServer = new EnterpriseBootstrapper();
+                    GraphDatabaseService graph = null;
                     // convert all config (spring, conf, code) to vararg Pairs
                 	List<Pair<String, String>> pairs = new ArrayList<>();
                 	for(Entry<String, String> entry : config.entrySet()) {
@@ -38,18 +41,33 @@ public class ExtendedHighlyAvailableGraphDatabaseFactory extends HighlyAvailable
                 	} 	
                     Pair<String, String> pairArray[] = new Pair[pairs.size()];
                     // will resolve to /dir/data/databases/graph.db 
-                    neoServer.start(storeDir, Optional.empty(), pairs.toArray(pairArray));
-                    GraphDatabaseService graph = neoServer.getServer().getDatabase().getGraph(); 
-                    // set the paxos HA listener only when dbms.mode=HA
-                    if(graph instanceof HighlyAvailableGraphDatabase) {
-                    	haMonitor.setDb((HighlyAvailableGraphDatabase) graph);
-                    	HighAvailabilityMemberStateMachine memberStateMachine = 
-                    			((HighlyAvailableGraphDatabase)graph).getDependencyResolver()
-                    				.resolveDependency(HighAvailabilityMemberStateMachine.class);
-                    	if ( memberStateMachine != null ) {
-                    		memberStateMachine.addHighAvailabilityMemberListener(haMonitor);
-                    		log.info("register: " +  haMonitor);
+                    int state = neoServer.start(storeDir, Optional.empty(), pairs.toArray(pairArray)); 
+                    // state is 0 for success, 1 will mean a null server
+                    if(state > 0) {
+                    	log.error("return sate of NeoServer.start(); is 1 - no GraphDatabase available - check config settings");
+                    }
+                    // will be null if state == 1
+                    NeoServer server = neoServer.getServer();
+                    if(null != server) {
+                    	Database database = server.getDatabase();
+                    	if(null != database) {
+                    		graph = database.getGraph(); 
+                    		// set the paxos HA listener only when dbms.mode=HA
+                    		if(graph instanceof HighlyAvailableGraphDatabase) {
+                    			haMonitor.setDb((HighlyAvailableGraphDatabase) graph);
+                    			HighAvailabilityMemberStateMachine memberStateMachine = 
+                    					((HighlyAvailableGraphDatabase)graph).getDependencyResolver()
+                    					.resolveDependency(HighAvailabilityMemberStateMachine.class);
+                    			if ( memberStateMachine != null ) {
+                    				memberStateMachine.addHighAvailabilityMemberListener(haMonitor);
+                    				log.info("register: " +  haMonitor);
+                    			}
+                    		}
+                    	} else {
+                    		log.error("database null : check your http configuration settings");
                     	}
+                    } else {
+                    	log.error("server null : check your http configuration settings");
                     }
                     return graph;
                 } };

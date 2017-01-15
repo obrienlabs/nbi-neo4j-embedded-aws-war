@@ -49,14 +49,15 @@
         <entry key="dbms.mode" value="HA"/><!-- required to get the http browser -->
         <entry key="browser.allow_outgoing_connection" value="true" />
         <entry key="unsupported.dbms.ephemeral" value="false" />   
-        <entry key="dbms.connector.http.address" value="0.0.0.0:7575" />
-        <entry key="dbms.connector.bolt.address" value="0.0.0.0:7688" />
-        <entry key="dbms.connector.http.enabled" value="true" />
         <entry key="dbms.connector.bolt.enabled" value="true" />
-        <entry key="dbms.connector.http.type" value="HTTP" />
+        <entry key="dbms.connector.bolt.address" value="0.0.0.0:7688" />
         <entry key="dbms.connector.bolt.type" value="BOLT" />
-        <entry key="dbms.connector.http.encryption" value="NONE" />
         <entry key="dbms.connector.bolt.tls_level" value="DISABLED" />
+        <entry key="dbms.connector.http.type" value="HTTP" />
+        <!-- enabled=false is not supported in this configuration -->
+        <entry key="dbms.connector.http.enabled" value="true" />
+        <entry key="dbms.connector.http.address" value="0.0.0.0:7575" />
+        <entry key="dbms.connector.http.encryption" value="NONE" />
         <entry key="dbms.security.auth_enabled" value="false"/>
         <entry key="dbms.logs.debug.level" value="DEBUG"/>
         <entry key="dbms.logs.http.enabled" value="true" />
