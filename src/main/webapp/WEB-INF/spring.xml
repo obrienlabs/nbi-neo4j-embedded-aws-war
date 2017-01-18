@@ -37,10 +37,10 @@
     <bean id="IGraphDatabaseService" class="org.obrienlabs.nbi.graph.service.GraphDatabaseServiceImpl"/>
     <util:map id="config">
         <entry key="ha.allow_init_cluster" value="true"/>
-        <entry key="ha.cluster_name" value="NSP"/>
-        <entry key="ha.cluster_server" value="127.0.0.1:5001"/>
+        <entry key="unsupported.cluster_name" value="NSP"/>
+        <entry key="ha.host.coordination" value="127.0.0.1:5001"/>
         <entry key="ha.pull_interval" value="10s"/>
-        <entry key="ha.server" value=":6016"/>
+        <entry key="ha.host.data" value=":6016"/>
         <entry key="ha.slave_only" value="false"/>
         <entry key="ha.tx_push_factor" value="1"/>
         <entry key="ha.tx_push_strategy" value="fixed_ascending"/>
