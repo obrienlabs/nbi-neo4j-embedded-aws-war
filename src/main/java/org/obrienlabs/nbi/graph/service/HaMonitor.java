@@ -8,6 +8,8 @@ public class HaMonitor implements HighAvailabilityMemberListener {
 
     protected HighlyAvailableGraphDatabase db;
     
+    //public MasterListenerManager masterListenerManager;
+    
     public void setDb(HighlyAvailableGraphDatabase aInDb) {
         db = aInDb;
     }

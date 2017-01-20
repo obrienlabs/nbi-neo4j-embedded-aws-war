@@ -40,6 +40,7 @@ public class ExtendedHighlyAvailableGraphDatabaseFactory extends HighlyAvailable
                 		pairs.add(Pair.of(entry.getKey(), entry.getValue()));
                 	} 	
                     Pair<String, String> pairArray[] = new Pair[pairs.size()];
+                    
                     // will resolve to /dir/data/databases/graph.db 
                     int state = neoServer.start(storeDir, Optional.empty(), pairs.toArray(pairArray)); 
                     // state is 0 for success, 1 will mean a null server
@@ -53,14 +54,19 @@ public class ExtendedHighlyAvailableGraphDatabaseFactory extends HighlyAvailable
                     	if(null != database) {
                     		graph = database.getGraph(); 
                     		// set the paxos HA listener only when dbms.mode=HA
+                    		// Note: initial TO_MASTER callback during server.start above is missed
                     		if(graph instanceof HighlyAvailableGraphDatabase) {
-                    			haMonitor.setDb((HighlyAvailableGraphDatabase) graph);
+                    			HighlyAvailableGraphDatabase haGraph = (HighlyAvailableGraphDatabase) graph;
+                    			haMonitor.setDb(haGraph);
                     			HighAvailabilityMemberStateMachine memberStateMachine = 
-                    					((HighlyAvailableGraphDatabase)graph).getDependencyResolver()
+                    					(haGraph).getDependencyResolver()
                     					.resolveDependency(HighAvailabilityMemberStateMachine.class);
                     			if ( memberStateMachine != null ) {
                     				memberStateMachine.addHighAvailabilityMemberListener(haMonitor);
-                    				log.info("register: " +  haMonitor);
+                    				System.out.println("register: " +  haMonitor);
+                    				// rethrow isMaster callback from start
+                    				//haMonitor.getMasterListenerManager().masterChanged(haGraph.isMaster());
+                    				System.out.println("isMaster: " + haGraph.isMaster());
                     			}
                     		}
                     	} else {
