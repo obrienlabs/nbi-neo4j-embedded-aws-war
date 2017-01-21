@@ -1,3 +1,10 @@
+/*
+ * Michael O'Brien (2017)  Overly Enthusiastic - Science | Software | Hardware | Experimentation
+ * michael at obrienlabs.org
+ * https://github.com/obrienlabs
+ * https://twitter.com/_mikeobrien
+ * http://eclipsejpa.blogspot.ca/
+ */
 package org.obrienlabs.nbi.graph.service;
 
 import javax.inject.Inject;

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- /*
+ * Michael O'Brien (2017)  Overly Enthusiastic - Science | Software | Hardware | Experimentation
+ * michael at obrienlabs.org
+ * https://github.com/obrienlabs
+ * https://twitter.com/_mikeobrien
+ * http://eclipsejpa.blogspot.ca/
+ */
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
    xmlns:util="http://www.springframework.org/schema/util"

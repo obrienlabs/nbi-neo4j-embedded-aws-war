@@ -1,12 +1,18 @@
+/*
+ * Michael O'Brien (2017)  Overly Enthusiastic - Science | Software | Hardware | Experimentation
+ * michael at obrienlabs.org
+ * https://github.com/obrienlabs
+ * https://twitter.com/_mikeobrien
+ * http://eclipsejpa.blogspot.ca/
+ */
+
 package org.obrienlabs.nbi.presentation;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.ServletConfig;
@@ -15,15 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.factory.GraphDatabaseSettings;
-import org.neo4j.helpers.collection.Pair;
-import org.neo4j.server.CommunityBootstrapper;
-import org.neo4j.server.NeoServer;
-import org.neo4j.server.ServerBootstrapper;
-import org.neo4j.server.enterprise.EnterpriseBootstrapper;
 import org.obrienlabs.nbi.graph.service.ApplicationServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
