@@ -15,11 +15,13 @@
 		omit-xml-declaration="true" />
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Test8</title>
-
+    <title>Neo4j Embedded-mode 3.1</title>
+    <!-- script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script-->
 </head>
 <body>
-Test7
+<p>Neo4j 3.1 embedded mode demo for <a href="https://github.com/obrienlabs/nbi-neo4j-embedded-aws-war">https://github.com/obrienlabs/nbi-neo4j-embedded-aws-war</a></p>
+<a href="FrontController?action=graph">Click to add a node to the graph database (takes a couple sec to bootstrap the jetty browser)</a>
 </body>
 </html>
 </jsp:root>

@@ -52,7 +52,7 @@ public class ExtendedHighlyAvailableGraphDatabaseFactory extends HighlyAvailable
                     int state = neoServer.start(storeDir, Optional.empty(), pairs.toArray(pairArray)); 
                     // state is 0 for success, 1 will mean a null server
                     if(state > 0) {
-                    	log.error("return sate of NeoServer.start(); is 1 - no GraphDatabase available - check config settings");
+                    	log.error("return state of NeoServer.start(); is 1 - no GraphDatabase available - check config settings");
                     }
                     // will be null if state == 1
                     NeoServer server = neoServer.getServer();
