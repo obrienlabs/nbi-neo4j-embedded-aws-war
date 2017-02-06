@@ -16,7 +16,7 @@ public class BoltUnitTest {
 	public static long pk = 0;
 	public static long pair = 0;
 	public static long linkMax = 0;
-    private static final String url = "bolt://192.168.0.26:7687";
+    private static final String url = "bolt://127.0.0.1:7687";
     private static final String username =  "neo4j";
     private static final String password = "password"; 
 	
@@ -24,10 +24,10 @@ public class BoltUnitTest {
          try (Transaction writeTransaction = session.beginTransaction()) {
         		writeTransaction.success();
         		writeTransaction.run( 
-        				"MATCH (a:Node"+ pair0 + "),(b:Node"+ pair1 + ") WHERE a.name = {p0} AND b.name = {p1} CREATE (a)-[r:" + label + "]->(b)",
+        				"MATCH (a:Node" + pair0 + "),(b:Node" + pair1 + ") WHERE a.name = {p0} AND b.name = {p1} CREATE (a)-[r:" + label + "]->(b)",
                         parameters( "p0", pk0, "p1", pk1));
         		StatementResult edge1  = writeTransaction.run( 
-        				"MATCH (a:Node"+ pair0 + "),(b:Node"+ pair1 + ") WHERE a.name = {p0} AND b.name = {p1} CREATE (a)-[r:" + label + "]->(b) RETURN r",
+        				"MATCH (a:Node" + pair1 + "),(b:Node" + pair0 + ") WHERE a.name = {p0} AND b.name = {p1} CREATE (a)-[r:" + label + "]->(b) RETURN r",
                         parameters( "p0", pk1, "p1", pk0));
         		writeTransaction.success();
         		linkStep--;
@@ -52,16 +52,17 @@ public class BoltUnitTest {
 		// base step
 		if(power == 0) {
 	        create(id,  0, session);
-	        create(id + 1, 0,  session);
-	        link("L0", 0, 0, id ,id + 1, session);  //pair++;
+	        create(id + 1, 1,  session);
+	        link("L0", 0, 1, id ,id + 1, session);  //pair++;
 	        return;
 		} else {
 			// recursive step
 			int ext = 1 << power;
 			createL(power - 1, id, session);
 			createL(power - 1, id + ext, session);	
-			for(int i=0; i<ext; i++) {
+			for(int i=0; i<ext; i+=2) {
 				link("L" + power, 0, 0, id + i, id + ext + i, session);
+				link("L" + power, 1,1, id + i + 1, id + ext + i + 1, session);
 			}
 		}
 	}
@@ -69,14 +70,17 @@ public class BoltUnitTest {
 	// match(n:Node0) where n.name=0 return(n);
 	 public void populateHypercube() throws Exception {
 		   long count = 0;
-		   int lastPower = 16;
-		   int power = 16;
+		   int lastPower = 7;
+		   int power = 4;
 		   linkMax = (1 << power) * (power + 1);
 	        Driver driver = GraphDatabase.driver(url,  AuthTokens.basic(username, password)); 
 	        try (Session session = driver.session()) {
 	            try (Transaction writeTransaction = session.beginTransaction()) {
 	            	for(int i=0;i<lastPower + 1;i++) {
 	            		writeTransaction.run(" match (:Node0)-[r:L" + i + "]->(:Node0) delete r");
+	            		writeTransaction.run(" match (:Node0)-[r:L" + i + "]->(:Node1) delete r");
+	            		writeTransaction.run(" match (:Node1)-[r:L" + i + "]->(:Node0) delete r");
+	            		writeTransaction.run(" match (:Node1)-[r:L" + i + "]->(:Node1) delete r");
 	            	}
 	        		 writeTransaction.run(" match(n) delete(n)");
 	        		 writeTransaction.success();
