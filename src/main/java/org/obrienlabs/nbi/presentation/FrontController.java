@@ -137,6 +137,11 @@ public class FrontController extends HttpServlet {
         }
     }
     
+    
+    private void processBolt(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
+
+    }
+    
     private void processGraph(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
         //String user = request.getParameter("u");        
         StringBuffer xmlBuffer = new StringBuffer();

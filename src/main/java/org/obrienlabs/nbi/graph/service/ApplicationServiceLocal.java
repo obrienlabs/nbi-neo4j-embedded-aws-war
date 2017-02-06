@@ -7,12 +7,13 @@
  */
 package org.obrienlabs.nbi.graph.service;
 
-import java.util.List;
+import org.neo4j.graphdb.Node;
 
 public interface ApplicationServiceLocal {
 	
 	// neo4j 3.1.0
 	String getGraph();
+	String pushBolt(Node node);
 	
 	Boolean health();
 }
