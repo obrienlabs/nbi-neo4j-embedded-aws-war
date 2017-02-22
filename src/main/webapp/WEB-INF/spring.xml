@@ -66,11 +66,15 @@
         <entry key="dbms.connector.http.enabled" value="true" />
         <entry key="dbms.connector.http.address" value="0.0.0.0:7575" />
         <entry key="dbms.connector.http.encryption" value="NONE" />
+        <entry key="dbms.connector.https.enabled" value="true" />
+        <entry key="dbms.connector.https.type" value="HTTP" />
+        <entry key="dbms.connector.https.address" value="0.0.0.0:7576" />
+        <entry key="dbms.connector.https.encryption" value="NONE" />
         <entry key="dbms.security.auth_enabled" value="false"/>
         <entry key="dbms.logs.debug.level" value="DEBUG"/>
         <entry key="dbms.logs.http.enabled" value="true" />
-        <entry key="dbms.logs.query.enabled" value="true"/> <!--  causes netty exceptions when ssl enabled -->
-        <entry key="dbms.shell.enabled" value="true"/>          
+        <entry key="dbms.logs.query.enabled" value="false"/> <!--  causes netty exceptions when ssl enabled -->
+        <entry key="dbms.shell.enabled" value="false"/>          
     </util:map>
     
     <bean id="haMonitor" class="org.obrienlabs.nbi.graph.service.HaMonitor"/>  
